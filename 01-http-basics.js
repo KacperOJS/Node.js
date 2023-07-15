@@ -1,5 +1,5 @@
 const http = require('http')
-
+//diffrent format of routing by http
 const server = http.createServer((req, res) => {
   // console.log(req.method)
   const url = req.url

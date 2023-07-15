@@ -4,6 +4,7 @@ const path = require('path')
 const app = express()
 
 // setup static and middleware
+//this gives accessibility to all files in public
 app.use(express.static('./public'))
 
 app.get('/', (req, res) => {
