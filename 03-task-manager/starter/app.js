@@ -1,7 +1,7 @@
 const express =require('express');
 const app = express();
 const tasks = require('./routes/tasks')
-const port = 5000;
+const port = 3000;
 
 
 //middleware

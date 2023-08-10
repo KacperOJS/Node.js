@@ -2,7 +2,7 @@ const getAllTasks = (req,res)=>{
 	res.send('all items')
 }
 const createTask = (req,res)=>{
-	res.send('all items')
+	res.json(req.body)
 }
 const getTask = (req,res)=>{
 	res.send('all items')
@@ -13,4 +13,10 @@ const updateTask = (req,res)=>{
 const deleteTask = (req,res)=>{
 	res.send('all items')
 }
-module.exports = {getAllTasks,createTask,getTask,updateTask,deleteTask}
+module.exports = {
+	getAllTasks,
+	createTask,
+	getTask,
+	updateTask,
+	deleteTask,
+}
