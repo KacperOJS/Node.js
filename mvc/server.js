@@ -11,7 +11,6 @@ const PORT = process.env.PORT || 3500;
 app.use(logger);
 
 // Cross Origin Resource Sharing
-
 app.use(cors(corsOptions));
 
 // built-in middleware to handle urlencoded data
@@ -24,12 +23,12 @@ app.use(express.json());
 
 //serve static files
 app.use('/', express.static(path.join(__dirname, '/public')));
-app.use('/subdir', express.static(path.join(__dirname, '/public')));
 
 // routes
 app.use('/', require('./routes/root'));
-app.use('/subdir', require('./routes/subdir'));
 app.use('/employees', require('./routes/api/employees'));
+app.use('/register', require('./routes/register'));
+app.use('/auth', require('./routes/auth'));
 
 app.all('*', (req, res) => {
     res.status(404);
