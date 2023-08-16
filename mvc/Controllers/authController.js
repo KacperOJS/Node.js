@@ -12,7 +12,7 @@ const usersDB = {
 	const findUser = usersDB.users.find((person)=>person.username ===user)
 	if(!findUser) return res.sendStatus(401); //Unauthorized
 	//evaluate password
-	const match = await bcrypt.compare(pwd,findUser);
+	const match = await bcrypt.compare(pwd,findUser.password);
 	if(match){
 		//create  JWTs token
 		res.json({'success': `User ${user} Logged in`})
