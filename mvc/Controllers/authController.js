@@ -23,12 +23,12 @@ const usersDB = {
 			{ "username": foundUser.username},
 			process.env.ACCESS_TOKEN_SECRET,
 			{expiresIn: '30s' }
-		)
+		);
 		const refreshToken = jwt.sign(
 			{ "username": foundUser.username},
 			process.env.REFRESH_TOKEN_SECRET,
 			{expiresIn: '1d' }
-		)
+		);
 		//saving refreshtoken with current user
 		 const otherUsers = usersDB.users.filter((person => person.username !== foundUser.username));
 		 const currentUser = {...foundUser,refreshToken};
