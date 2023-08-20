@@ -1,6 +1,22 @@
 [
-	{
-		"username":"kacper",
-		"haslo":"miska"
-	}
+  {
+    "username": "kacper",
+    "password": "miska"
+  },
+  {
+    "username": "Kacper4",
+    "password": "rycho123"
+  },
+  {
+    "username": "Kacper4",
+    "password": "rycho123"
+  },
+  {
+    "username": "Kacper3",
+    "password": "rycho123"
+  },
+  {
+    "username": "Kacper2",
+    "password": "rycho123"
+  }
 ]
