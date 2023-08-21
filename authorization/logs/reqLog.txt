@@ -77,3 +77,6 @@
 20230821	19:20:45	efaa7804-3825-4baf-9a79-bb57a411b183	GET	undefined	/employees
 20230821	19:20:49	78484437-be1b-493b-82cd-201f20f17ed1	POST	undefined	/employees
 20230821	19:20:55	d8267c70-121e-44f1-8d08-1fe153cf3f64	DELETE	undefined	/employees
+20230821	22:20:45	7cd9b886-4c33-43ea-bbde-3fb9be074f35	POST	undefined	/register
+20230821	22:23:57	1f968df6-0455-413c-b4c9-b34df51d4756	POST	undefined	/register
+20230821	22:27:46	6fe73235-f86f-4ddb-ac49-68f030e8812f	POST	undefined	/register
