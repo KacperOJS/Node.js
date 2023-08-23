@@ -3,7 +3,7 @@ const app = express();
 const port = process.env.PORT || 3003;
 const mongoose = require('mongoose');
 const UserModel = require('./models/Users');
-const connection = "mongodb+srv://kacperodziemczyk:abc12345@mernstack.stwvsyw.mongodb.net/?retryWrites=true&w=majority";
+const connection = process.env.mongoose;
 const cors = require('cors');
 app.use(cors());
 mongoose.connect(connection, {
