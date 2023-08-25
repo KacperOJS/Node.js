@@ -12,7 +12,10 @@
   "dependencies": {
     "bootstrap": "^5.2.3",
     "lodash": "^4.17.21",
-    "uuid": "^9.0.0"
+    "react-router-dom": "^6.15.0",
+    "uninstall": "^0.0.0",
+    "uuid": "^9.0.0",
+    "v6": "^0.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"
