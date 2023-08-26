@@ -1,22 +1,31 @@
 const mongoose = require('mongoose');
+const AutoIncreament = require('mongoose-sequence')(mongoose)
 const noteSchema = new Scheam({
-	username:{ 
-		type:mongoose.Scheam.Types.ObcjectId,
+	user:{ 
+		type: mongoose.Schema.Types.ObcjectId,
 		required:true,
 		ref: 'User'
 	},
-	password:{
+	title:{
 		type:String,
 		required:true
 	},
-	roles:[{
+	text:{
 		type:String,
-		default:"Employee"
-	}],
+		required:true
+	},
 	active:{
 		type:Boolean,
-		default:true	
-	},
-
+		default:false	
+	}
+},
+{
+	timestamps:true
+}
+)
+noteSchema.plugin(AutoIncreament,{
+	inc_field:'ticket',
+	id:'ticketNums',
+	start_seq: 500
 })
-module.exports = mongoose.model('User',noteSchema)
+module.exports = mongoose.model('Note',noteSchema)
