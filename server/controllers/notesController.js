@@ -29,72 +29,51 @@ const createNewNote = asyncHandler(async (req, res) => {
     if (!user|| !title || !text) {
         return res.status(400).json({ message: 'All fields are required' })
     }
-
-    // Check for duplicate username
     const duplicate = await User.findOne({ username }).lean().exec()
 
     if (duplicate) {
-        return res.status(409).json({ message: 'Duplicate username' })
+        return res.status(409).json({ message: 'Duplicate note' })
     }
+	const note = await Note.create({user,title,text})
+	if(note) return res.status(201).json({message:"New note Created"})
+	else return res.status(400).json({message: 'Invalid to create a Note'})
 
-    // Hash password 
-    const hashedPwd = await bcrypt.hash(password, 10) // salt rounds
-
-    const userObject = { username, "password": hashedPwd, roles }
-
-    // Create and store new user 
-
-    if (user) { //created 
-        res.status(201).json({ message: `New user ${username} created` })
-    } else {
-        res.status(400).json({ message: 'Invalid user data received' })
-    }
 })
 
 // @desc Update a user
 // @route PATCH /users
 // @access Private
-const updateUser = asyncHandler(async (req, res) => {
-    const { id, username, roles, active, password } = req.body
+const updateNote = asyncHandler(async (req, res) => {
+    const { id, user, title, text, completed } = req.body
 
     // Confirm data 
-    if (!id || !username || !Array.isArray(roles) || !roles.length || typeof active !== 'boolean') {
+    if (!id || !user || !title || !text || typeof completed !== 'boolean') {
         return res.status(400).json({ message: 'All fields except password are required' })
     }
-
-    // Does the user exist to update?
-    const user = await User.findById(id).exec()
-
-    if (!user) {
-        return res.status(400).json({ message: 'User not found' })
-    }
-
+	 const note = await Note.findById(id).exec();
     // Check for duplicate 
-    const duplicate = await User.findOne({ username }).lean().exec()
+	if(!note) return  res.status(400).json({ message: 'All fields except password are required' })
 
     // Allow updates to the original user 
+	const duplicate = await Note.findOne({ title }).lean().exec()
+
+    // Allow renaming of the original note 
     if (duplicate && duplicate?._id.toString() !== id) {
-        return res.status(409).json({ message: 'Duplicate username' })
+        return res.status(409).json({ message: 'Duplicate note title' })
     }
+	note.user = user
+    note.title = title
+    note.text = text
+    note.completed = completed
 
-    user.username = username
-    user.roles = roles
-    user.active = active
-
-    if (password) {
-        // Hash password 
-        user.password = await bcrypt.hash(password, 10) // salt rounds 
-    }
-
-    const updatedUser = await user.save()
-
-    res.json({ message: `${updatedUser.username} updated` })
+    const updatedNote = await note.save()
+	res.json(`'${updatedNote.title}' updated`)
 })
 
 // @desc Delete a user
 // @route DELETE /users
 // @access Private
-const deleteUser = asyncHandler(async (req, res) => {
+const deleteNote = asyncHandler(async (req, res) => {
     const { id } = req.body
 
     // Confirm data
@@ -104,27 +83,20 @@ const deleteUser = asyncHandler(async (req, res) => {
 
     // Does the user still have assigned notes?
     const note = await Note.findOne({ user: id }).lean().exec()
-    if (note) {
-        return res.status(400).json({ message: 'User has assigned notes' })
-    }
+    if (!note) {
+        return res.status(400).json({ message: 'Note not found' })
+	}
 
-    // Does the user exist to delete?
-    const user = await User.findById(id).exec()
+    const result = await note.deleteOne()
 
-    if (!user) {
-        return res.status(400).json({ message: 'User not found' })
-    }
-
-    const result = await user.deleteOne()
-
-    const reply = `Username ${result.username} with ID ${result._id} deleted`
+    const reply = `Username ${result.title} with ID ${result._id} deleted`
 
     res.json(reply)
 })
 
 module.exports = {
-    getAllUsers,
-    createNewUser,
-    updateUser,
-    deleteUser
+    getAllNotes,
+    createNewNote,
+    updateNote,
+    deleteNote
 }
