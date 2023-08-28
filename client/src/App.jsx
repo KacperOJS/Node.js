@@ -2,9 +2,11 @@ import React from 'react'
 import {Routes,Route} from 'react-router-dom';
 import Layout from './components/Layout';
 import Public from './components/Public';
-import Login from './features/Login';
+import Login from './features/auth/Login';
 import DashLayout from './components/DashLayout';
-import Welcome from './features/Welcome';
+import Welcome from './features/auth/Welcome';
+import NotesList from './features/notes/NotesList';
+import Userslist from './features/users/Userslist';
 const App = () => {
   return (
 	<Routes>
@@ -13,8 +15,15 @@ const App = () => {
 			<Route path="login" element={<Login/>}/>
 
 			<Route path="dash" element={<DashLayout/>}/>
+			{/* <Route path="notes" element={<NotesList/>}/> */}
 
 			<Route index element={<Welcome/>}/>
+			<Route path='notes'>
+				<Route index element={<NotesList/>}/>
+			</Route>
+			<Route path='users'>
+				<Route index element={<Userslist/>}/>
+			</Route>
 		</Route>
 	</Routes>
   )
