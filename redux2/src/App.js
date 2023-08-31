@@ -1,24 +1,26 @@
-import {useDispatch, useSelector} from "react-redux";
-import { addUser } from "./features/Users";
-import { useState } from "react";
-// import { uuid } from 'uuidv4';
+import React, { useState } from 'react'
+import axios from 'axios';
 const App = () => {
-	const dispatch = useDispatch();
-	const userList = useSelector((state)=> state.users.value)
-	const [name,setName] = useState(" ");
-	const [username,setUsername] = useState(" ");
+	const [username,setUsername]=useState('');
+	const [password,setPassword]=useState('');
+	const HandleCreateNewuser = ()=>{
+		axios.post("http://localhost:3330/createuser",{
+			username: username,
+			password: password,
+		})
+		.then(res => {
+			console.log(res)
+			alert('User Created');
+		}
+		)
+		.catch(err=>console.error(err))
+
+	}
   return (
 	<div>
-
-		<input type="text" placeholder="Name..." onChange={(e)=> setName(e.target.value)}/>
-		<input type="text" placeholder="Surname.." onChange={(e)=> setUsername(e.target.value)}/>
-		<button onClick={()=>{dispatch(addUser({id:userList[userList.length - 1].id + 1,name:name ,surname:username}))}}>Add user</button>
-		{userList.map((user,idx)=>{
-			return <div key={idx}>
-			<h1>{user.name}</h1>
-			<h1>{user.surname}</h1>
-			</div>
-		})}
+		<input type='text' placeholder='username' onChange={(e)=>setUsername(e.target.value)}/>
+		<input type='text' placeholder='password' onChange={(e)=>setPassword(e.target.value)}/>
+		<button onClick={HandleCreateNewuser}>Wyslij</button>
 	</div>
   )
 }
