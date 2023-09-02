@@ -42,40 +42,50 @@ app.post('/createuser', async (req,res)=>{
 })
 
 
+const tokenStore = {};
+
+// Your other middleware and routes go here...
+
+// Your '/login' route remains mostly the same, but store the token in memory
 app.post('/login', async (req, res) => {
-	const { username, password } = req.body;
-  
-	if (!username || !password) {
-	  return res.status(400).json({ message: 'Username and password are required' });
-	}
-  
-	const findUser = usersDB.users.find((person) => person.username === username && person.password === password);
-  
-	if (!findUser) {
-	  return res.status(401).json({ message: 'Invalid username or password' });
-	}
-  
-	// Use the ACCESS_TOKEN_SECRET from the environment variable
-	const token = jwt.sign(
-	  { username: username },
-	  process.env.ACCESS_TOKEN_SECRET,
-	  {
-		expiresIn: '30s'
-	  }
-	);
-	try {
-	  // Append the login information to the 'information.txt' file
-	  await fsPromises.appendFile(
-		path.join(__dirname, 'information.txt'),
-		`Username ${username} has logged on ${new Date()}\n`
-	  );
-	} catch (err) {
-	  console.error(err);
-	  return res.status(500).json({ message: 'Internal server error' });
-	}
-  
-	res.status(200).json({ accessToken: token, message: `Logged into ${username}` });
-  });
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+    return res.status(400).json({ message: 'Username and password are required' });
+  }
+
+  const findUser = usersDB.users.find((person) => person.username === username && person.password === password);
+
+  if (!findUser) {
+    return res.status(401).json({ message: 'Invalid username or password' });
+  }
+
+  // Use the ACCESS_TOKEN_SECRET from the environment variable
+  const token = jwt.sign(
+    { username: username },
+    process.env.ACCESS_TOKEN_SECRET,
+    {
+      expiresIn: '30s'
+    }
+  );
+
+  // Store the token in memory
+  tokenStore[username] = token;
+
+  try {
+    // Append the login information to the 'information.txt' file
+    await fsPromises.appendFile(
+      path.join(__dirname, 'information.txt'),
+      `Username ${username} has logged on ${new Date()}\n`
+    );
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+
+  res.status(200).json({ accessToken: token, message: `Logged into ${username}` });
+});
+
 
 
 
