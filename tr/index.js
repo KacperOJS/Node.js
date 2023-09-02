@@ -6,6 +6,14 @@ const path = require('path');
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 const fsPromises = require('fs').promises;
+const jwt =require('jsonwebtoken');
+const dotenv = require('dotenv');
+const cors = require('cors');
+
+// Enable CORS for all routes
+app.use(cors());
+
+dotenv.config();
 const usersDB = {
 	users: require('./users.json'),
 	setUsers: function(data){
@@ -47,6 +55,14 @@ app.post('/login', async (req, res) => {
 	  return res.status(401).json({ message: 'Invalid username or password' });
 	}
   
+	// Use the ACCESS_TOKEN_SECRET from the environment variable
+	const token = jwt.sign(
+	  { username: username },
+	  process.env.ACCESS_TOKEN_SECRET,
+	  {
+		expiresIn: '30s'
+	  }
+	);
 	try {
 	  // Append the login information to the 'information.txt' file
 	  await fsPromises.appendFile(
@@ -58,8 +74,13 @@ app.post('/login', async (req, res) => {
 	  return res.status(500).json({ message: 'Internal server error' });
 	}
   
-	res.status(200).json({ message: `Logged into ${username}` });
+	res.status(200).json({ accessToken: token, message: `Logged into ${username}` });
   });
+
+
+
+
+
   app.put('/updateuser', (req, res) => {
 	const { username, newPassword } = req.body;
   
